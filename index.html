@@ -205,6 +205,9 @@
     <label for="area">Площадь заготовки (м²):</label>
     <input type="number" id="area" step="0.001" value="0.521" />
 
+    <label for="quantity">Количество коробок:</label>
+    <input type="number" id="quantity" value="1" min="1" />
+
     <label for="grade">Марка и цвет картона:</label>
     <select id="grade">
       <option value="T-23С Бурый">Т-23С Бурый</option>
@@ -291,20 +294,49 @@
       "T-27С Бурый": { small: [368.95, 345.84, 329.29], large: [363.91, 341.13, 324.08] }
     };
 
-    function calculate() {
-      const area = parseFloat(document.getElementById('area').value);
-      const selected = document.getElementById('grade').value;
+   function calculate() {
+  const area = parseFloat(document.getElementById('area').value);
+  const quantity = parseInt(document.getElementById('quantity').value);
+  const selected = document.getElementById('grade').value;
 
-      if (isNaN(area) || area <= 0) {
-        alert('Введите корректное значение площади');
-        return;
-      }
+  if (isNaN(area) || area <= 0 || isNaN(quantity) || quantity <= 0) {
+    alert('Введите корректные значения площади и количества');
+    return;
+  }
 
-      const set = area >= 1 ? prices[selected].large : prices[selected].small;
-      document.getElementById('retail').textContent = (area * set[0]).toFixed(2) + ' ₸';
-      document.getElementById('wholesale').textContent = (area * set[1]).toFixed(2) + ' ₸';
-      document.getElementById('special').textContent = (area * set[2]).toFixed(2) + ' ₸';
-    }
+  const fullArea = area * quantity;
+  const priceSet = area >= 1 ? prices[selected].large : prices[selected].small;
+
+  const retailPrice = (area * priceSet[0]).toFixed(2) + ' ₸';
+  const wholesalePrice = (area * priceSet[1]).toFixed(2) + ' ₸';
+  const specialPrice = (area * priceSet[2]).toFixed(2) + ' ₸';
+
+  document.getElementById('retail').textContent = retailPrice;
+  document.getElementById('wholesale').textContent = wholesalePrice;
+  document.getElementById('special').textContent = specialPrice;
+
+  // Очистка всех цветовых подсветок
+  ['retail', 'wholesale', 'special'].forEach(id => {
+    document.getElementById(id).style.backgroundColor = '#f4f7ff';
+  });
+
+  // Определяем категорию по полной площади
+  let target;
+  if (fullArea >= 18600) {
+    target = 'special';
+  } else if (fullArea >= 3000) {
+    target = 'wholesale';
+  } else if (fullArea >= 2000) {
+    target = 'retail';
+  } else {
+    target = null; // не подсвечивать, если меньше 2000
+  }
+
+  // Подсветка соответствующей цены
+  if (target) {
+    document.getElementById(target).style.backgroundColor = '#dbe6ff'; // лёгкий синий оттенок
+  }
+}
 
     function updatePrices() {
       const sel = document.getElementById('update-grade').value;
