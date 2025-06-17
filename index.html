@@ -377,7 +377,24 @@
 		};
 
 
+		const saveData = (data) => (
+            fetch("https://api.jsonbin.io/v3/b/685193898561e97a5025e715/", {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Master-Key": "$2a$10$Urvphe8wDLXk0hQCP93w6.9PurhM0LY.a2U10Jr5qudHJYCo.XQ7i",
+                    "X-Access-Key": "$2a$10$F0eZWdQx6eGyDr6m3s4Pkux9oxEzm/MCgWt6Tj03cqNgtm1insXyO",
+                    "X-Bin-Meta": "false",
+                },
+                body: JSON.stringify(data)
+            })
+                .then((response) => response.status === 200 ? true : false)
+                .catch((error) => {
+                    console.error("Error updating JSON:", error);
 
+                    return false;
+                })
+       		 );
 
 
 		function calculate() {
@@ -479,6 +496,15 @@
 					prices[sel][size][idx] = num;
 				}
 			}
+			
+			const result = await saveData(prices);
+
+		            if(!result){
+		                alert("Не удалось обновить цены!");
+				    return;
+		            }
+
+			
 			alert("Цены обновлены");
 			document.querySelectorAll("input[type=number]").forEach((i) => (i.value = ""));
 			fillUpdateForm();
