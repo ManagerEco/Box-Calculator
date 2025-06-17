@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Калькулятор стоимости коробки</title>
+  <style>
+    /* Сброс стилей и базовое оформление */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      background: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      max-width: 500px;
+      width: 100%;
+      padding: 30px 40px;
+    }
+
+    h2, h3 {
+      text-align: center;
+      color: #3a3f58;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #5a607f;
+    }
+
+    input[type=number], select {
+      width: 100%;
+      padding: 10px 15px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1.8px solid #cdd3e3;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      background-color: #fafbff;
+      color: #4b4f66;
+    }
+
+    input[type=number]:focus, select:focus {
+      border-color: #a1b2ff;
+      outline: none;
+      background-color: #f0f3ff;
+      color: #1a1c29;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      background: #7a95ff;
+      border: none;
+      padding: 12px 0;
+      font-size: 1.1rem;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(122, 149, 255, 0.6);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      background: #5c75e6;
+      box-shadow: 0 6px 15px rgba(92, 117, 230, 0.8);
+    }
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      margin-top: 15px;
+      width: 100%;
+      text-align: center;
+      font-weight: 600;
+      color: #3a3f58;
+    }
+
+    th {
+      background: #e5e9ff;
+      padding: 12px 0;
+      border-radius: 12px 12px 0 0;
+      font-size: 1.1rem;
+    }
+
+    td {
+      background: #f4f7ff;
+      padding: 15px 0;
+      border-radius: 0 0 12px 12px;
+      font-size: 1.15rem;
+      color: #4b4f66;
+      box-shadow: inset 0 -2px 5px rgba(255,255,255,0.6);
+    }
+
+    .update-section {
+      margin-top: 40px;
+      padding: 25px 30px;
+      border: 1.5px solid #cdd3e3;
+      border-radius: 14px;
+      background-color: #f9fbff;
+      box-shadow: 0 6px 12px rgba(120, 140, 255, 0.12);
+    }
+
+    .update-section h3 {
+      margin-top: 0;
+      color: #5561ff;
+    }
+
+    .update-section small {
+      color: #8a8fbd;
+      font-style: italic;
+      display: block;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Калькулятор стоимости коробки из гофрокартона (₸)</h2>
+
+    <label for="area">Площадь заготовки (м²):</label>
+    <input type="number" id="area" step="0.001" value="0.521" />
+
+    <label for="grade">Марка и цвет картона:</label>
+    <select id="grade">
+      <option value="T-23С Бурый">Т-23С Бурый</option>
+      <option value="T-23В Бурый">Т-23В Бурый</option>
+      <option value="T-24С Бурый">Т-24С Бурый</option>
+      <option value="T-24В Бурый">Т-24В Бурый</option>
+      <option value="T-24В Белый">Т-24В Белый</option>
+      <option value="T-25С Бурый">Т-25С Бурый</option>
+      <option value="T-25В Бурый">Т-25В Бурый</option>
+      <option value="T-26С Бурый">Т-26С Бурый</option>
+      <option value="T-27С Бурый">Т-27С Бурый</option>
+    </select>
+
+    <button onclick="calculate()">Рассчитать</button>
+
+    <h3>Цена за одну коробку (в тенге):</h3>
+    <table>
+      <tr>
+        <th>Розничная</th>
+        <th>Оптовая</th>
+        <th>Спец. цена</th>
+      </tr>
+      <tr>
+        <td id="retail">–</td>
+        <td id="wholesale">–</td>
+        <td id="special">–</td>
+      </tr>
+    </table>
+
+    <!-- Форма изменения цен -->
+    <div class="update-section">
+      <h3>Обновить цены для марки картона</h3>
+      <label for="update-grade">Выберите марку:</label>
+      <select id="update-grade" onchange="fillUpdateForm()">
+        <option value="T-23С Бурый">Т-23С Бурый</option>
+        <option value="T-23В Бурый">Т-23В Бурый</option>
+        <option value="T-24С Бурый">Т-24С Бурый</option>
+        <option value="T-24В Бурый">Т-24В Бурый</option>
+        <option value="T-24В Белый">Т-24В Белый</option>
+        <option value="T-25С Бурый">Т-25С Бурый</option>
+        <option value="T-25В Бурый">Т-25В Бурый</option>
+        <option value="T-26С Бурый">Т-26С Бурый</option>
+        <option value="T-27С Бурый">Т-27С Бурый</option>
+      </select>
+
+      <small>Оставьте поля пустыми, если не хотите изменять цену.</small>
+
+      <label for="update-retail-small">Розничная цена (меньше 1 м²):</label>
+      <input type="number" id="update-retail-small" step="0.01" placeholder="текущая цена появится здесь" />
+
+      <label for="update-wholesale-small">Оптовая цена (меньше 1 м²):</label>
+      <input type="number" id="update-wholesale-small" step="0.01" placeholder="текущая цена появится здесь" />
+
+      <label for="update-special-small">Спец. цена (меньше 1 м²):</label>
+      <input type="number" id="update-special-small" step="0.01" placeholder="текущая цена появится здесь" />
+
+      <label for="update-retail-large">Розничная цена (≥ 1 м²):</label>
+      <input type="number" id="update-retail-large" step="0.01" placeholder="текущая цена появится здесь" />
+
+      <label for="update-wholesale-large">Оптовая цена (≥ 1 м²):</label>
+      <input type="number" id="update-wholesale-large" step="0.01" placeholder="текущая цена появится здесь" />
+
+      <label for="update-special-large">Спец. цена (≥ 1 м²):</label>
+      <input type="number" id="update-special-large" step="0.01" placeholder="текущая цена появится здесь" />
+
+      <button onclick="updatePrices()">Обновить цены</button>
+    </div>
+  </div>
+
+  <script>
+    const prices = {
+      "T-23С Бурый": {
+        small: [265.75, 249.29, 237.50],
+        large: [263.96, 247.61, 236.10]
+      },
+      "T-23В Бурый": {
+        small: [248.70, 233.33, 222.33],
+        large: [247.08, 231.82, 220.89]
+      },
+      "T-24С Бурый": {
+        small: [278.57, 261.28, 248.90],
+        large: [276.77, 259.60, 247.38]
+      },
+      "T-24В Бурый": {
+        small: [262.79, 246.52, 234.87],
+        large: [261.17, 245.00, 233.42]
+      },
+      "T-24В Белый": {
+        small: [320.46, 300.48, 286.16],
+        large: [318.84, 298.96, 284.72]
+      },
+      "T-25С Бурый": {
+        small: [291.37, 273.26, 260.29],
+        large: [289.58, 271.58, 258.65]
+      },
+      "T-25В Бурый": {
+        small: [276.89, 259.71, 247.40],
+        large: [275.26, 258.19, 245.96]
+      },
+      "T-26С Бурый": {
+        small: [336.22, 315.22, 300.18],
+        large: [334.43, 313.54, 298.13]
+      },
+      "T-27С Бурый": {
+        small: [368.95, 345.84, 329.29],
+        large: [363.91, 341.13, 324.08]
+      }
+    };
+
+    function calculate() {
+      const area = parseFloat(document.getElementById('area').value);
+      const selected = document.getElementById('grade').value;
+
+      if (isNaN(area) || area <= 0) {
+        alert('Введите корректное значение площади (больше 0)');
+        return;
+      }
+
+      const priceSet = area >= 1 ? prices[selected].large : prices[selected].small;
+
+      const retail = area * priceSet[0];
+      const wholesale = area * priceSet[1];
+      const special = area * priceSet[2];
+
+      document.getElementById('retail').textContent = retail.toFixed(2) + ' ₸';
+      document.getElementById('wholesale').textContent = wholesale.toFixed(2) + ' ₸';
+      document.getElementById('special').textContent = special.toFixed(2) + ' ₸';
+    }
+
+    function updatePrices() {
+      const selected = document.getElementById('update-grade').value;
+
+      const retailSmall = document.getElementById('update-retail-small').value;
+      const wholesaleSmall = document.getElementById('update-wholesale-small').value;
+      const specialSmall = document.getElementById('update-special-small').value;
+
+      const retailLarge = document.getElementById('update-retail-large').value;
+      const wholesaleLarge = document.getElementById('update-wholesale-large').value;
+      const specialLarge = document.getElementById('update-special-large').value;
+
+      if (retailSmall !== '') {
+        const val = parseFloat(retailSmall);
+        if (isNaN(val) || val < 0) { alert('Розничная цена (меньше 1 м²) должна быть положительным числом'); return; }
+        prices[selected].small[0] = val;
+      }
+      if (wholesaleSmall !== '') {
+        const val = parseFloat(wholesaleSmall);
+        if (isNaN(val) || val < 0) { alert('Оптовая цена (меньше 1 м²) должна быть положительным числом'); return; }
+        prices[selected].small[1] = val;
+      }
+      if (specialSmall !== '') {
+        const val = parseFloat(specialSmall);
+        if (isNaN(val) || val < 0) { alert('Спец. цена (меньше 1 м²) должна быть положительным числом'); return; }
+        prices[selected].small[2] = val;
+      }
+
+      if (retailLarge !== '') {
+        const val = parseFloat(retailLarge);
+        if (isNaN(val) || val < 0) { alert('Розничная цена (≥ 1 м²) должна быть положительным числом'); return; }
+        prices[selected].large[0] = val;
+      }
+      if (wholesaleLarge !== '') {
+        const val = parseFloat(wholesaleLarge);
+        if (isNaN(val) || val < 0) { alert('Оптовая цена (≥ 1 м²) должна быть положительным числом'); return; }
+        prices[selected].large[1] = val;
+      }
+      if (specialLarge !== '') {
+        const val = parseFloat(specialLarge);
+        if (isNaN(val) || val < 0) { alert('Спец. цена (≥ 1 м²) должна быть положительным числом'); return; }
+        prices[selected].large[2] = val;
+      }
+
+      alert(`Цены для "${selected}" успешно обновлены!`);
+
+      document.getElementById('update-retail-small').value = '';
+      document.getElementById('update-wholesale-small').value = '';
+      document.getElementById('update-special-small').value = '';
+      document.getElementById('update-retail-large').value = '';
+      document.getElementById('update-wholesale-large').value = '';
+      document.getElementById('update-special-large').value = '';
+
+      fillUpdateForm();
+    }
+
+    function fillUpdateForm() {
+      const selected = document.getElementById('update-grade').value;
+      const curr = prices[selected];
+
+      document.getElementById('update-retail-small').placeholder = curr.small[0].toFixed(2);
+      document.getElementById('update-wholesale-small').placeholder = curr.small[1].toFixed(2);
+      document.getElementById('update-special-small').placeholder = curr.small[2].toFixed(2);
+
+      document.getElementById('update-retail-large').placeholder = curr.large[0].toFixed(2);
+      document.getElementById('update-wholesale-large').placeholder = curr.large[1].toFixed(2);
+      document.getElementById('update-special-large').placeholder = curr.large[2].toFixed(2);
+    }
+
+    fillUpdateForm();
+  </script>
+</body>
+</html>
