@@ -294,6 +294,14 @@
       "T-27С Бурый": { small: [368.95, 345.84, 329.29], large: [363.91, 341.13, 324.08] }
     };
 
+    <div id="progress-container" style="margin-top: 20px;">
+  <label>Прогресс по площади:</label>
+  <div style="position: relative; width: 100%; height: 20px; background: #eee; border-radius: 10px;">
+    <div id="progress-bar" style="height: 100%; width: 0%; background: linear-gradient(to right, #a0c4ff, #4f83ff); border-radius: 10px;"></div>
+    <div id="progress-label" style="position: absolute; width: 100%; text-align: center; top: 0; line-height: 20px; font-size: 12px; color: #333;"></div>
+  </div>
+</div>
+
    function calculate() {
   const area = parseFloat(document.getElementById('area').value);
   const quantity = parseInt(document.getElementById('quantity').value);
@@ -318,7 +326,29 @@
   // Очистка всех цветовых подсветок
   ['retail', 'wholesale', 'special'].forEach(id => {
     document.getElementById(id).style.backgroundColor = '#f4f7ff';
-  });
+  })
+    // Обновление шкалы прогресса
+let progress = 0;
+let label = '';
+
+if (fullArea < 2000) {
+  progress = (fullArea / 2000) * 33;
+  label = 'Розничная цена';
+} else if (fullArea < 3000) {
+  progress = 33 + ((fullArea - 2000) / 1000) * 33;
+  label = 'Оптовая цена';
+} else if (fullArea < 18600) {
+  progress = 66 + ((fullArea - 3000) / (18600 - 3000)) * 34;
+  label = 'Спец. цена';
+} else {
+  progress = 100;
+  label = 'Макс. скидка!';
+}
+
+document.getElementById('progress-bar').style.width = progress + '%';
+document.getElementById('progress-label').textContent = `${Math.round(progress)}% — ${label}`;
+    
+    ;
 
   // Определяем категорию по полной площади
   let target;
