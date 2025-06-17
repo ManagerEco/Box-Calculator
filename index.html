@@ -109,40 +109,52 @@
     }
 
     .accordion {
-      margin-top: 40px;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1.5px solid #cdd3e3;
-      box-shadow: 0 6px 12px rgba(120, 140, 255, 0.12);
-    }
+  margin-top: 40px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(120, 140, 255, 0.12);
+}
 
-    .accordion-button {
-      background-color: #f9fbff;
-      color: #5561ff;
-      cursor: pointer;
-      padding: 15px 20px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      text-align: left;
-      width: 100%;
-      border: none;
-      outline: none;
-      transition: background-color 0.3s ease;
-    }
+.accordion-button {
+  background-color: #7a95ff;
+  color: white;
+  cursor: pointer;
+  padding: 14px 20px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: left;
+  width: 100%;
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background-color 0.3s ease;
+  border-radius: 10px;
+}
 
-    .accordion-button:hover {
-      background-color: #eef2ff;
-    }
+.accordion-button:hover {
+  background-color: #5c75e6;
+}
 
-    .accordion-content {
-      display: none;
-      padding: 20px;
-      background-color: #f9fbff;
-    }
+.accordion-button .arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
 
-    .accordion-content.show {
-      display: block;
-    }
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  background-color: #f9fbff;
+  padding: 0 20px;
+  border-radius: 0 0 12px 12px;
+}
+
+.accordion-content.show {
+  padding: 20px;
+  max-height: 1000px;
+}
 
     .accordion-content small {
       color: #8a8fbd;
@@ -224,7 +236,9 @@
 
     <!-- Аккордеон для формы изменения цен -->
     <div class="accordion">
-      <button class="accordion-button" onclick="toggleAccordion()">Изменить цены</button>
+      <button class="accordion-button" onclick="toggleAccordion(this)">
+  Изменить цены <span class="arrow">▼</span>
+</button>
       <div class="accordion-content" id="accordionContent">
         <label for="update-grade">Выберите марку:</label>
         <select id="update-grade" onchange="fillUpdateForm()">
@@ -329,9 +343,17 @@
       document.getElementById('update-special-large').placeholder = p.large[2].toFixed(2);
     }
 
-    function toggleAccordion() {
-      document.getElementById("accordionContent").classList.toggle("show");
-    }
+   function toggleAccordion(button) {
+  const content = document.getElementById("accordionContent");
+  content.classList.toggle("show");
+
+  const arrow = button.querySelector(".arrow");
+  if (content.classList.contains("show")) {
+    arrow.textContent = "▲";
+  } else {
+    arrow.textContent = "▼";
+  }
+}
 
     fillUpdateForm();
   </script>
