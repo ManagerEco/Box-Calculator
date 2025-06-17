@@ -351,7 +351,14 @@
 		let prices = {};
 
 		const initData = async () => {
-			prices = await fetch("https://managereco.github.io/Box-Calculator/prices.json")
+			prices = await fetch("https://api.jsonbin.io/v3/b/685193898561e97a5025e715/", {
+              			  method: "GET",
+             			   headers: {
+                    "X-Master-Key": "$2a$10$Urvphe8wDLXk0hQCP93w6.9PurhM0LY.a2U10Jr5qudHJYCo.XQ7i",
+                    "X-Access-Key": "$2a$10$F0eZWdQx6eGyDr6m3s4Pkux9oxEzm/MCgWt6Tj03cqNgtm1insXyO",
+                    "X-Bin-Meta": "false"
+             		   }
+          		  })
 				.then((response) => response.json())
 				.then((data) => data)
 				.catch((error) => {
