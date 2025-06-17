@@ -1,492 +1,513 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Калькулятор стоимости коробки</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Калькулятор стоимости коробки</title>
 
-  <style>
-  #progress-container {
-    position: relative;
-    width: 100%;
-    height: 30px;
-    background: #eee;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-top: 20px;
-  }
+	<style>
+		#progress-container {
+			position: relative;
+			width: 100%;
+			height: 30px;
+			background: #eee;
+			border-radius: 8px;
+			overflow: hidden;
+			margin-top: 20px;
+		}
 
-  #progress-bar {
-    height: 100%;
-    width: 0;
-    border-radius: 8px;
-    background: linear-gradient(to right, #c8f7c5, #fff99a, #ffc979, #ffaaaa);
-    transition: width 0.6s ease;
-  }
+		#progress-bar {
+			height: 100%;
+			width: 0;
+			border-radius: 8px;
+			background: linear-gradient(to right, #c8f7c5, #fff99a, #ffc979, #ffaaaa);
+			transition: width 0.6s ease;
+		}
 
-  #progress-label {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    top: 0;
-    font-weight: bold;
-    font-size: 14px;
-    line-height: 30px;
-  }
+		#progress-label {
+			position: absolute;
+			width: 100%;
+			text-align: center;
+			top: 0;
+			font-weight: bold;
+			font-size: 14px;
+			line-height: 30px;
+		}
 
-  #progress-note {
-    text-align: center;
-    font-size: 13px;
-    margin-top: 6px;
-    color: #555;
-  }
-</style>
-  
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      background: #f5f7fa;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #333;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+		#progress-note {
+			text-align: center;
+			font-size: 13px;
+			margin-top: 6px;
+			color: #555;
+		}
+	</style>
 
-    .container {
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      max-width: 500px;
-      width: 100%;
-      padding: 30px 40px;
-    }
+	<style>
+		* {
+			box-sizing: border-box;
+		}
 
-    h2, h3 {
-      text-align: center;
-      color: #3a3f58;
-      margin-bottom: 20px;
-      font-weight: 600;
-    }
+		body {
+			background: #f5f7fa;
+			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			color: #333;
+			margin: 0;
+			min-height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+		}
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 600;
-      color: #5a607f;
-    }
+		.container {
+			background: #ffffff;
+			border-radius: 12px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+			max-width: 500px;
+			width: 100%;
+			padding: 30px 40px;
+		}
 
-    input[type=number], select {
-      width: 100%;
-      padding: 10px 15px;
-      margin-top: 6px;
-      border-radius: 8px;
-      border: 1.8px solid #cdd3e3;
-      font-size: 1rem;
-      background-color: #fafbff;
-      color: #4b4f66;
-      transition: border-color 0.3s ease;
-    }
+		h2,
+		h3 {
+			text-align: center;
+			color: #3a3f58;
+			margin-bottom: 20px;
+			font-weight: 600;
+		}
 
-    input[type=number]:focus, select:focus {
-      border-color: #a1b2ff;
-      outline: none;
-      background-color: #f0f3ff;
-      color: #1a1c29;
-    }
+		label {
+			display: block;
+			margin-top: 15px;
+			font-weight: 600;
+			color: #5a607f;
+		}
 
-    button {
-      margin-top: 25px;
-      width: 100%;
-      background: #7a95ff;
-      border: none;
-      padding: 12px 0;
-      font-size: 1.1rem;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      box-shadow: 0 4px 10px rgba(122, 149, 255, 0.6);
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    }
+		input[type="number"],
+		select {
+			width: 100%;
+			padding: 10px 15px;
+			margin-top: 6px;
+			border-radius: 8px;
+			border: 1.8px solid #cdd3e3;
+			font-size: 1rem;
+			background-color: #fafbff;
+			color: #4b4f66;
+			transition: border-color 0.3s ease;
+		}
 
-    button:hover {
-      background: #5c75e6;
-      box-shadow: 0 6px 15px rgba(92, 117, 230, 0.8);
-    }
+		input[type="number"]:focus,
+		select:focus {
+			border-color: #a1b2ff;
+			outline: none;
+			background-color: #f0f3ff;
+			color: #1a1c29;
+		}
 
-    table {
-      border-collapse: separate;
-      border-spacing: 0 10px;
-      margin-top: 15px;
-      width: 100%;
-      text-align: center;
-      font-weight: 600;
-      color: #3a3f58;
-    }
+		button {
+			margin-top: 25px;
+			width: 100%;
+			background: #7a95ff;
+			border: none;
+			padding: 12px 0;
+			font-size: 1.1rem;
+			color: white;
+			border-radius: 10px;
+			cursor: pointer;
+			font-weight: 700;
+			box-shadow: 0 4px 10px rgba(122, 149, 255, 0.6);
+			transition: background-color 0.3s ease, box-shadow 0.3s ease;
+		}
 
-    th {
-      background: #e5e9ff;
-      padding: 12px 0;
-      border-radius: 12px 12px 0 0;
-      font-size: 1.1rem;
-    }
+		button:hover {
+			background: #5c75e6;
+			box-shadow: 0 6px 15px rgba(92, 117, 230, 0.8);
+		}
 
-    td {
-      background: #f4f7ff;
-      padding: 15px 0;
-      border-radius: 0 0 12px 12px;
-      font-size: 1.15rem;
-      color: #4b4f66;
-      box-shadow: inset 0 -2px 5px rgba(255,255,255,0.6);
-    }
+		table {
+			border-collapse: separate;
+			border-spacing: 0 10px;
+			margin-top: 15px;
+			width: 100%;
+			text-align: center;
+			font-weight: 600;
+			color: #3a3f58;
+		}
 
-    .accordion {
-  margin-top: 40px;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 6px 12px rgba(120, 140, 255, 0.12);
-}
+		th {
+			background: #e5e9ff;
+			padding: 12px 0;
+			border-radius: 12px 12px 0 0;
+			font-size: 1.1rem;
+		}
 
-.accordion-button {
-  background-color: #7a95ff;
-  color: white;
-  cursor: pointer;
-  padding: 14px 20px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  text-align: left;
-  width: 100%;
-  border: none;
-  outline: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: background-color 0.3s ease;
-  border-radius: 10px;
-}
+		td {
+			background: #f4f7ff;
+			padding: 15px 0;
+			border-radius: 0 0 12px 12px;
+			font-size: 1.15rem;
+			color: #4b4f66;
+			box-shadow: inset 0 -2px 5px rgba(255, 255, 255, 0.6);
+		}
 
-.accordion-button:hover {
-  background-color: #5c75e6;
-}
+		.accordion {
+			margin-top: 40px;
+			border-radius: 14px;
+			overflow: hidden;
+			box-shadow: 0 6px 12px rgba(120, 140, 255, 0.12);
+		}
 
-.accordion-button .arrow {
-  font-size: 1.2rem;
-  transition: transform 0.3s ease;
-}
+		.accordion-button {
+			background-color: #7a95ff;
+			color: white;
+			cursor: pointer;
+			padding: 14px 20px;
+			font-size: 1.05rem;
+			font-weight: 600;
+			text-align: left;
+			width: 100%;
+			border: none;
+			outline: none;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			transition: background-color 0.3s ease;
+			border-radius: 10px;
+		}
 
-.accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-  background-color: #f9fbff;
-  padding: 0 20px;
-  border-radius: 0 0 12px 12px;
-}
+		.accordion-button:hover {
+			background-color: #5c75e6;
+		}
 
-.accordion-content.show {
-  padding: 20px;
-  max-height: 1000px;
-}
+		.accordion-button .arrow {
+			font-size: 1.2rem;
+			transition: transform 0.3s ease;
+		}
 
-    .accordion-content small {
-      color: #8a8fbd;
-      font-style: italic;
-      display: block;
-      margin-bottom: 10px;
-      font-size: 0.9rem;
-    }
+		.accordion-content {
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.4s ease;
+			background-color: #f9fbff;
+			padding: 0 20px;
+			border-radius: 0 0 12px 12px;
+		}
 
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
+		.accordion-content.show {
+			padding: 20px;
+			max-height: 1000px;
+		}
 
-      .container {
-        padding: 20px;
-      }
+		.accordion-content small {
+			color: #8a8fbd;
+			font-style: italic;
+			display: block;
+			margin-bottom: 10px;
+			font-size: 0.9rem;
+		}
 
-      input[type=number], select, button {
-        font-size: 0.95rem;
-        padding: 10px;
-      }
+		@media (max-width: 480px) {
+			body {
+				padding: 10px;
+			}
 
-      h2, h3 {
-        font-size: 1.1rem;
-      }
+			.container {
+				padding: 20px;
+			}
 
-      table th, table td {
-        font-size: 0.95rem;
-        padding: 10px 0;
-      }
+			input[type="number"],
+			select,
+			button {
+				font-size: 0.95rem;
+				padding: 10px;
+			}
 
-      .accordion-button {
-        font-size: 1rem;
-        padding: 12px 16px;
-      }
+			h2,
+			h3 {
+				font-size: 1.1rem;
+			}
 
-      .accordion-content {
-        padding: 15px;
-      }
-    }
-  </style>
+			table th,
+			table td {
+				font-size: 0.95rem;
+				padding: 10px 0;
+			}
+
+			.accordion-button {
+				font-size: 1rem;
+				padding: 12px 16px;
+			}
+
+			.accordion-content {
+				padding: 15px;
+			}
+		}
+	</style>
 </head>
+
 <body>
-  <div class="container">
-    <h2>Калькулятор стоимости коробки из гофрокартона (₸)</h2>
+	<div class="container">
+		<h2>Калькулятор стоимости коробки из гофрокартона (₸)</h2>
 
-    <label for="area">Площадь заготовки (м²):</label>
-    <input type="number" id="area" step="0.001" value="0.521" />
+		<label for="area">Площадь заготовки (м²):</label>
+		<input type="number" id="area" step="0.001" value="0.521" />
 
-    <label for="quantity">Количество коробок:</label>
-    <input type="number" id="quantity" value="1" min="1" />
+		<label for="quantity">Количество коробок:</label>
+		<input type="number" id="quantity" value="1" min="1" />
 
-    <label for="grade">Марка и цвет картона:</label>
-    <select id="grade">
-      <option value="T-23С Бурый">Т-23С Бурый</option>
-      <option value="T-23В Бурый">Т-23В Бурый</option>
-      <option value="T-24С Бурый">Т-24С Бурый</option>
-      <option value="T-24В Бурый">Т-24В Бурый</option>
-      <option value="T-24В Белый">Т-24В Белый</option>
-      <option value="T-25С Бурый">Т-25С Бурый</option>
-      <option value="T-25В Бурый">Т-25В Бурый</option>
-      <option value="T-26С Бурый">Т-26С Бурый</option>
-      <option value="T-27С Бурый">Т-27С Бурый</option>
-    </select>
+		<label for="grade">Марка и цвет картона:</label>
+		<select id="grade">
+			<option value="T-23С Бурый">Т-23С Бурый</option>
+			<option value="T-23В Бурый">Т-23В Бурый</option>
+			<option value="T-24С Бурый">Т-24С Бурый</option>
+			<option value="T-24В Бурый">Т-24В Бурый</option>
+			<option value="T-24В Белый">Т-24В Белый</option>
+			<option value="T-25С Бурый">Т-25С Бурый</option>
+			<option value="T-25В Бурый">Т-25В Бурый</option>
+			<option value="T-26С Бурый">Т-26С Бурый</option>
+			<option value="T-27С Бурый">Т-27С Бурый</option>
+		</select>
 
-    <button onclick="calculate()">Рассчитать</button>
+		<button onclick="calculate()">Рассчитать</button>
 
-    <h3>Цена за одну коробку:</h3>
-    <table>
-      <tr>
-        <th>Розничная</th>
-        <th>Оптовая</th>
-        <th>Спец. цена</th>
-      </tr>
+		<h3>Цена за одну коробку (в тенге):</h3>
+		<table>
+			<tr>
+				<th>Розничная</th>
+				<th>Оптовая</th>
+				<th>Спец. цена</th>
+			</tr>
 
-      <div id="progress-container">
-  <div id="progress-bar"></div>
-  <div id="progress-label"></div>
-</div>
-      
-<div id="progress-note"></div>
+			<div id="progress-container">
+				<div id="progress-bar"></div>
+				<div id="progress-label"></div>
+			</div>
 
-         <div id="progress-container" style="margin-top: 20px; display: none;">
- 
-  <div style="position: relative; width: 100%; height: 20px; background: #eee; border-radius: 10px;">
-    <div id="progress-bar" style="height: 100%; width: 0%; background: linear-gradient(to right, #a0c4ff, #4f83ff); border-radius: 10px;"></div>
-    <div id="progress-label" style="position: absolute; width: 100%; text-align: center; top: 0; line-height: 20px; font-size: 12px; color: #333;"></div>
-  </div>
-</div>
-      
-      <tr>
-        <td id="retail">–</td>
-        <td id="wholesale">–</td>
-        <td id="special">–</td>
-      </tr>
-    </table>
+			<div id="progress-note"></div>
 
-    <!-- Аккордеон для формы изменения цен -->
-    <div class="accordion">
-      <button class="accordion-button" onclick="toggleAccordion(this)">
-  Изменить цены <span class="arrow">▼</span>
-</button>
-      <div class="accordion-content" id="accordionContent">
-        <label for="update-grade">Выберите марку:</label>
-        <select id="update-grade" onchange="fillUpdateForm()">
-          <option value="T-23С Бурый">Т-23С Бурый</option>
-          <option value="T-23В Бурый">Т-23В Бурый</option>
-          <option value="T-24С Бурый">Т-24С Бурый</option>
-          <option value="T-24В Бурый">Т-24В Бурый</option>
-          <option value="T-24В Белый">Т-24В Белый</option>
-          <option value="T-25С Бурый">Т-25С Бурый</option>
-          <option value="T-25В Бурый">Т-25В Бурый</option>
-          <option value="T-26С Бурый">Т-26С Бурый</option>
-          <option value="T-27С Бурый">Т-27С Бурый</option>
-        </select>
+			<div id="progress-container" style="margin-top: 20px; display: none">
+				<div style="position: relative; width: 100%; height: 20px; background: #eee; border-radius: 10px">
+					<div id="progress-bar"
+						style="height: 100%; width: 0%; background: linear-gradient(to right, #a0c4ff, #4f83ff); border-radius: 10px">
+					</div>
+					<div id="progress-label"
+						style="position: absolute; width: 100%; text-align: center; top: 0; line-height: 20px; font-size: 12px; color: #333">
+					</div>
+				</div>
+			</div>
 
-        <small>Оставьте поля пустыми, если не хотите изменять цену.</small>
+			<tr>
+				<td id="retail">–</td>
+				<td id="wholesale">–</td>
+				<td id="special">–</td>
+			</tr>
+		</table>
 
-        <label for="update-retail-small">Розничная цена (меньше 1 м²):</label>
-        <input type="number" id="update-retail-small" step="0.01" placeholder="" />
+		<!-- Аккордеон для формы изменения цен -->
+		<div class="accordion">
+			<button class="accordion-button" onclick="toggleAccordion(this)">Изменить цены <span
+					class="arrow">▼</span></button>
+			<div class="accordion-content" id="accordionContent">
+				<label for="update-grade">Выберите марку:</label>
+				<select id="update-grade" onchange="fillUpdateForm()">
+					<option value="T-23С Бурый">Т-23С Бурый</option>
+					<option value="T-23В Бурый">Т-23В Бурый</option>
+					<option value="T-24С Бурый">Т-24С Бурый</option>
+					<option value="T-24В Бурый">Т-24В Бурый</option>
+					<option value="T-24В Белый">Т-24В Белый</option>
+					<option value="T-25С Бурый">Т-25С Бурый</option>
+					<option value="T-25В Бурый">Т-25В Бурый</option>
+					<option value="T-26С Бурый">Т-26С Бурый</option>
+					<option value="T-27С Бурый">Т-27С Бурый</option>
+				</select>
 
-        <label for="update-wholesale-small">Оптовая цена (меньше 1 м²):</label>
-        <input type="number" id="update-wholesale-small" step="0.01" placeholder="" />
+				<small>Оставьте поля пустыми, если не хотите изменять цену.</small>
 
-        <label for="update-special-small">Спец. цена (меньше 1 м²):</label>
-        <input type="number" id="update-special-small" step="0.01" placeholder="" />
+				<label for="update-retail-small">Розничная цена (меньше 1 м²):</label>
+				<input type="number" id="update-retail-small" step="0.01" placeholder="" />
 
-        <label for="update-retail-large">Розничная цена (≥ 1 м²):</label>
-        <input type="number" id="update-retail-large" step="0.01" placeholder="" />
+				<label for="update-wholesale-small">Оптовая цена (меньше 1 м²):</label>
+				<input type="number" id="update-wholesale-small" step="0.01" placeholder="" />
 
-        <label for="update-wholesale-large">Оптовая цена (≥ 1 м²):</label>
-        <input type="number" id="update-wholesale-large" step="0.01" placeholder="" />
+				<label for="update-special-small">Спец. цена (меньше 1 м²):</label>
+				<input type="number" id="update-special-small" step="0.01" placeholder="" />
 
-        <label for="update-special-large">Спец. цена (≥ 1 м²):</label>
-        <input type="number" id="update-special-large" step="0.01" placeholder="" />
+				<label for="update-retail-large">Розничная цена (≥ 1 м²):</label>
+				<input type="number" id="update-retail-large" step="0.01" placeholder="" />
 
-        <button onclick="updatePrices()">Обновить цены</button>
-      </div>
-    </div>
-  </div>
+				<label for="update-wholesale-large">Оптовая цена (≥ 1 м²):</label>
+				<input type="number" id="update-wholesale-large" step="0.01" placeholder="" />
 
-  <script>
-    const prices = {
-      "T-23С Бурый": { small: [265.75, 249.29, 237.50], large: [263.96, 247.61, 236.10] },
-      "T-23В Бурый": { small: [248.70, 233.33, 222.33], large: [247.08, 231.82, 220.89] },
-      "T-24С Бурый": { small: [278.57, 261.28, 248.90], large: [276.77, 259.60, 247.38] },
-      "T-24В Бурый": { small: [262.79, 246.52, 234.87], large: [261.17, 245.00, 233.42] },
-      "T-24В Белый": { small: [320.46, 300.48, 286.16], large: [318.84, 298.96, 284.72] },
-      "T-25С Бурый": { small: [291.37, 273.26, 260.29], large: [289.58, 271.58, 258.65] },
-      "T-25В Бурый": { small: [276.89, 259.71, 247.40], large: [275.26, 258.19, 245.96] },
-      "T-26С Бурый": { small: [336.22, 315.22, 300.18], large: [334.43, 313.54, 298.13] },
-      "T-27С Бурый": { small: [368.95, 345.84, 329.29], large: [363.91, 341.13, 324.08] }
-    };
+				<label for="update-special-large">Спец. цена (≥ 1 м²):</label>
+				<input type="number" id="update-special-large" step="0.01" placeholder="" />
 
-    const initData = () => {
-                fetch("prices.json")
-                    .then((response) => response.json())
-                    .then((data) => console.log(data))
-                    .catch((error) => console.error("Error fetching JSON:", error));
-            };
-    initData();
+				<button onclick="updatePrices()">Обновить цены</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		let prices = {};
+
+		const initData = async () => {
+			prices = await fetch("https://managereco.github.io/Box-Calculator/prices.json")
+				.then((response) => response.json())
+				.then((data) => data)
+				.catch((error) => {
+					console.error("Error fetching JSON:", error);
+
+					return false;
+				});
+
+			if (prices === false || Object.keys(prices).length === 0) {
+				alert("Не удалось получить данные о ценах!");
+
+				return false;
+			}
+
+			return true;
+		};
 
 
-   function calculate() {
-  const area = parseFloat(document.getElementById('area').value);
-  const quantity = parseInt(document.getElementById('quantity').value);
-  const selected = document.getElementById('grade').value;
 
-  if (isNaN(area) || area <= 0 || isNaN(quantity) || quantity <= 0) {
-    alert('Введите корректные значения площади и количества');
-    return;
-  }
 
-  const fullArea = area * quantity;
-  const priceSet = area >= 1 ? prices[selected].large : prices[selected].small;
 
-  const retailPrice = (area * priceSet[0]).toFixed(2) + ' ₸';
-  const wholesalePrice = (area * priceSet[1]).toFixed(2) + ' ₸';
-  const specialPrice = (area * priceSet[2]).toFixed(2) + ' ₸';
+		function calculate() {
+			const area = parseFloat(document.getElementById("area").value);
+			const quantity = parseInt(document.getElementById("quantity").value);
+			const selected = document.getElementById("grade").value;
 
-  document.getElementById('retail').textContent = retailPrice;
-  document.getElementById('wholesale').textContent = wholesalePrice;
-  document.getElementById('special').textContent = specialPrice;
+			if (isNaN(area) || area <= 0 || isNaN(quantity) || quantity <= 0) {
+				alert("Введите корректные значения площади и количества");
+				return;
+			}
 
-  // Очистка всех цветовых подсветок
-  ['retail', 'wholesale', 'special'].forEach(id => {
-    document.getElementById(id).style.backgroundColor = '#f4f7ff';
-  })
-// Обновление шкалы прогресса
-let progress = 0;
-let label = '';
-let nextGoalText = '';
-const steps = [
-  { threshold: 2000, label: 'Розничная цена' },
-  { threshold: 3000, label: 'Оптовая цена' },
-  { threshold: 18600, label: 'Спец. цена' }
-];
+			const fullArea = area * quantity;
+			const priceSet = area >= 1 ? prices[selected].large : prices[selected].small;
 
-if (fullArea < 2000) {
-  progress = (fullArea / 2000) * 33;
-  label = 'Розничная цена';
-  const remaining = Math.ceil((2000 - fullArea) / area);
-  nextGoalText = `До розничной цены нужно ещё ~${remaining} шт.`;
-} else if (fullArea < 3000) {
-  progress = 33 + ((fullArea - 2000) / 1000) * 33;
-  label = 'Оптовая цена';
-  const remaining = Math.ceil((3000 - fullArea) / area);
-  nextGoalText = `До оптовой цены нужно ещё ~${remaining} шт.`;
-} else if (fullArea < 18600) {
-  progress = 66 + ((fullArea - 3000) / (18600 - 3000)) * 34;
-  label = 'Спец. цена';
-  const remaining = Math.ceil((18600 - fullArea) / area);
-  nextGoalText = `До спец цены нужно ещё ~${remaining} шт.`;
-} else {
-  progress = 100;
-  label = 'Макс. скидка!';
-  nextGoalText = '';
-}
+			const retailPrice = (area * priceSet[0]).toFixed(2) + " ₸";
+			const wholesalePrice = (area * priceSet[1]).toFixed(2) + " ₸";
+			const specialPrice = (area * priceSet[2]).toFixed(2) + " ₸";
 
-document.getElementById('progress-bar').style.width = progress + '%';
-document.getElementById('progress-label').textContent = `${Math.round(progress)}% — ${label}`;
-document.getElementById('progress-note').textContent = nextGoalText;
-    
-    ;
+			document.getElementById("retail").textContent = retailPrice;
+			document.getElementById("wholesale").textContent = wholesalePrice;
+			document.getElementById("special").textContent = specialPrice;
 
-  // Определяем категорию по полной площади
-  let target;
-  if (fullArea >= 18600) {
-    target = 'special';
-  } else if (fullArea >= 3000) {
-    target = 'wholesale';
-  } else if (fullArea >= 2000) {
-    target = 'retail';
-  } else {
-    target = null; // не подсвечивать, если меньше 2000
-  }
+			// Очистка всех цветовых подсветок
+			["retail", "wholesale", "special"].forEach((id) => {
+				document.getElementById(id).style.backgroundColor = "#f4f7ff";
+			});
+			// Обновление шкалы прогресса
+			let progress = 0;
+			let label = "";
+			let nextGoalText = "";
+			const steps = [
+				{ threshold: 2000, label: "Розничная цена" },
+				{ threshold: 3000, label: "Оптовая цена" },
+				{ threshold: 18600, label: "Спец. цена" },
+			];
 
-  // Подсветка соответствующей цены
-  if (target) {
-    document.getElementById(target).style.backgroundColor = '#dbe6ff'; // лёгкий синий оттенок
-  }
-}
+			if (fullArea < 2000) {
+				progress = (fullArea / 2000) * 33;
+				label = "Розничная цена";
+				const remaining = Math.ceil((2000 - fullArea) / area);
+				nextGoalText = `До оптовой цены нужно ещё ~${remaining} шт.`;
+			} else if (fullArea < 3000) {
+				progress = 33 + ((fullArea - 2000) / 1000) * 33;
+				label = "Оптовая цена";
+				const remaining = Math.ceil((3000 - fullArea) / area);
+				nextGoalText = `До спец. цены нужно ещё ~${remaining} шт.`;
+			} else if (fullArea < 18600) {
+				progress = 66 + ((fullArea - 3000) / (18600 - 3000)) * 34;
+				label = "Спец. цена";
+				const remaining = Math.ceil((18600 - fullArea) / area);
+				nextGoalText = `До макс. скидки нужно ещё ~${remaining} шт.`;
+			} else {
+				progress = 100;
+				label = "Макс. скидка!";
+				nextGoalText = "";
+			}
 
-    function updatePrices() {
-      const sel = document.getElementById('update-grade').value;
-      const fields = [
-        ["update-retail-small", "small", 0],
-        ["update-wholesale-small", "small", 1],
-        ["update-special-small", "small", 2],
-        ["update-retail-large", "large", 0],
-        ["update-wholesale-large", "large", 1],
-        ["update-special-large", "large", 2]
-      ];
-      for (const [id, size, idx] of fields) {
-        const val = document.getElementById(id).value;
-        if (val !== "") {
-          const num = parseFloat(val);
-          if (isNaN(num) || num < 0) {
-            alert("Цены должны быть положительными числами");
-            return;
-          }
-          prices[sel][size][idx] = num;
-        }
-      }
-      alert("Цены обновлены");
-      document.querySelectorAll("input[type=number]").forEach(i => i.value = "");
-      fillUpdateForm();
-    }
+			document.getElementById("progress-bar").style.width = progress + "%";
+			document.getElementById("progress-label").textContent = `${Math.round(progress)}% — ${label}`;
+			document.getElementById("progress-note").textContent = nextGoalText;
 
-    function fillUpdateForm() {
-      const sel = document.getElementById('update-grade').value;
-      const p = prices[sel];
-      document.getElementById('update-retail-small').placeholder = p.small[0].toFixed(2);
-      document.getElementById('update-wholesale-small').placeholder = p.small[1].toFixed(2);
-      document.getElementById('update-special-small').placeholder = p.small[2].toFixed(2);
-      document.getElementById('update-retail-large').placeholder = p.large[0].toFixed(2);
-      document.getElementById('update-wholesale-large').placeholder = p.large[1].toFixed(2);
-      document.getElementById('update-special-large').placeholder = p.large[2].toFixed(2);
-    }
+			// Определяем категорию по полной площади
+			let target;
+			if (fullArea >= 18600) {
+				target = "special";
+			} else if (fullArea >= 3000) {
+				target = "wholesale";
+			} else if (fullArea >= 2000) {
+				target = "retail";
+			} else {
+				target = null; // не подсвечивать, если меньше 2000
+			}
 
-   function toggleAccordion(button) {
-  const content = document.getElementById("accordionContent");
-  content.classList.toggle("show");
+			// Подсветка соответствующей цены
+			if (target) {
+				document.getElementById(target).style.backgroundColor = "#dbe6ff"; // лёгкий синий оттенок
+			}
+		}
 
-  const arrow = button.querySelector(".arrow");
-  if (content.classList.contains("show")) {
-    arrow.textContent = "▲";
-  } else {
-    arrow.textContent = "▼";
-  }
-}
+		function updatePrices() {
+			const sel = document.getElementById("update-grade").value;
+			const fields = [
+				["update-retail-small", "small", 0],
+				["update-wholesale-small", "small", 1],
+				["update-special-small", "small", 2],
+				["update-retail-large", "large", 0],
+				["update-wholesale-large", "large", 1],
+				["update-special-large", "large", 2],
+			];
+			for (const [id, size, idx] of fields) {
+				const val = document.getElementById(id).value;
+				if (val !== "") {
+					const num = parseFloat(val);
+					if (isNaN(num) || num < 0) {
+						alert("Цены должны быть положительными числами");
+						return;
+					}
+					prices[sel][size][idx] = num;
+				}
+			}
+			alert("Цены обновлены");
+			document.querySelectorAll("input[type=number]").forEach((i) => (i.value = ""));
+			fillUpdateForm();
+		}
 
-    fillUpdateForm();
-  </script>
+		function fillUpdateForm() {
+			const sel = document.getElementById("update-grade").value;
+			const p = prices[sel];
+			document.getElementById("update-retail-small").placeholder = p.small[0].toFixed(2);
+			document.getElementById("update-wholesale-small").placeholder = p.small[1].toFixed(2);
+			document.getElementById("update-special-small").placeholder = p.small[2].toFixed(2);
+			document.getElementById("update-retail-large").placeholder = p.large[0].toFixed(2);
+			document.getElementById("update-wholesale-large").placeholder = p.large[1].toFixed(2);
+			document.getElementById("update-special-large").placeholder = p.large[2].toFixed(2);
+		}
+
+		function toggleAccordion(button) {
+			const content = document.getElementById("accordionContent");
+			content.classList.toggle("show");
+
+			const arrow = button.querySelector(".arrow");
+			if (content.classList.contains("show")) {
+				arrow.textContent = "▲";
+			} else {
+				arrow.textContent = "▼";
+			}
+		}
+
+		window.addEventListener("load", async () => {
+			const result = await initData();
+
+			if (!result) return;
+
+			fillUpdateForm();
+		});
+	</script>
 </body>
+
 </html>
