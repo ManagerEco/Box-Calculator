@@ -428,18 +428,7 @@
  			 const areaM2 = (sheetHeight * sheetWidth) / 1_000_000;
 			// Вывод значений
   			document.getElementById('area').value = areaM2.toFixed(5);
-
-			  // Цены
-  const selected = document.getElementById('grade').value;
-  const priceSet = areaM2 >= 1 ? prices[selected].large : prices[selected].small;
-
-  const retail = areaM2 * priceSet[0];
-  const wholesale = areaM2 * priceSet[1];
-  const special = areaM2 * priceSet[2];
-
-  document.getElementById('retail').textContent = retail.toFixed(2) + ' ₸';
-  document.getElementById('wholesale').textContent = wholesale.toFixed(2) + ' ₸';
-  document.getElementById('special').textContent = special.toFixed(2) + ' ₸';
+	 
 
   // Показ размеров и площади в блоке result
   document.getElementById('result').innerHTML = `
