@@ -250,8 +250,17 @@
 	<div class="container">
 		<h2>Калькулятор стоимости коробки из гофрокартона (₸)</h2>
 
-		<label for="area">Площадь заготовки (м²):</label>
-		<input type="number" id="area" step="0.001" value="0.521" />
+		<label for="length">Длина (Д), мм:</label>
+  		  <input type="number" id="length" value="">
+
+   		 <label for="width">Ширина (Ш), мм:</label>
+  		  <input type="number" id="width" value="">
+
+  		  <label for="height">Высота (В), мм:</label>
+  		  <input type="number" id="height" value="">
+		
+   			 <label for="area">Площадь заготовки (м²):</label>
+  			  <input type="number" id="area" step="0.001" value="" />
 
 		<label for="quantity">Количество коробок:</label>
 		<input type="number" id="quantity" value="1" min="1" />
@@ -398,6 +407,48 @@
 
 
 		function calculate() {
+			// Получение размеров
+  			const length = parseFloat(document.getElementById('length').value);
+  			const width = parseFloat(document.getElementById('width').value);
+  			const height = parseFloat(document.getElementById('height').value);
+
+ 			 if (isNaN(length) || isNaN(width) || isNaN(height) || length <= 0 || width <= 0 || height <= 0) {
+   			 alert('Введите корректные размеры (все значения должны быть положительными числами)');
+   			 return;
+ 			 }
+			// Расчёт площади заготовки
+  				const thickness = 4;
+  				const glueFlap = 40;
+  				const extra = 12;
+  				const extra2 = 4;
+			const sheetHeight = height + extra2 + width + extra2;
+ 			 const rawSheetWidth = 2 * length + 2 * width + glueFlap + extra;
+ 			 const sheetWidth = Math.ceil(rawSheetWidth / 10) * 10;
+
+ 			 const areaM2 = (sheetHeight * sheetWidth) / 1_000_000;
+			// Вывод значений
+  			document.getElementById('area').value = areaM2.toFixed(5);
+
+			  // Цены
+  const selected = document.getElementById('grade').value;
+  const priceSet = areaM2 >= 1 ? prices[selected].large : prices[selected].small;
+
+  const retail = areaM2 * priceSet[0];
+  const wholesale = areaM2 * priceSet[1];
+  const special = areaM2 * priceSet[2];
+
+  document.getElementById('retail').textContent = retail.toFixed(2) + ' ₸';
+  document.getElementById('wholesale').textContent = wholesale.toFixed(2) + ' ₸';
+  document.getElementById('special').textContent = special.toFixed(2) + ' ₸';
+
+  // Показ размеров и площади в блоке result
+  document.getElementById('result').innerHTML = `
+    <strong>Размер заготовки (мм):</strong><br>
+    Высота: <b>${sheetHeight}</b> мм<br>
+    Ширина (развёртка): <b>${sheetWidth}</b> мм<br>
+    <strong>Площадь:</strong> <b>${areaM2.toFixed(5)}</b> м²
+  `;
+			
 			const area = parseFloat(document.getElementById("area").value);
 			const quantity = parseInt(document.getElementById("quantity").value);
 			const selected = document.getElementById("grade").value;
