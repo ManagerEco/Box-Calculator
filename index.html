@@ -434,29 +434,23 @@
   			document.getElementById('area').value = areaM2.toFixed(5);
 	 
 
-  // Показ размеров и площади в блоке result
-  document.getElementById('result').innerHTML = `
-    <strong>Размер заготовки (мм):</strong><br>
-    Высота: <b>${sheetHeight}</b> мм<br>
-    Ширина (развёртка): <b>${sheetWidth}</b> мм<br>
-    <strong>Площадь:</strong> <b>${areaM2.toFixed(5)}</b> м²
-  `;
+
 			
-			const area = parseFloat(document.getElementById("area").value);
+			// const area = parseFloat(document.getElementById("area").value);
 			const quantity = parseInt(document.getElementById("quantity").value);
 			const selected = document.getElementById("grade").value;
 
-			if (isNaN(area) || area <= 0 || isNaN(quantity) || quantity <= 0) {
+			if (isNaN(areaM2) || areaM2 <= 0 || isNaN(quantity) || quantity <= 0) {
 				alert("Введите корректные значения площади и количества");
 				return;
 			}
 
-			const fullArea = area * quantity;
-			const priceSet = area >= 1 ? prices[selected].large : prices[selected].small;
+			const fullArea = areaM2 * quantity;
+			const priceSet = areaM2 >= 1 ? prices[selected].large : prices[selected].small;
 
-			const retailPrice = (area * priceSet[0]).toFixed(2) + " ₸";
-			const wholesalePrice = (area * priceSet[1]).toFixed(2) + " ₸";
-			const specialPrice = (area * priceSet[2]).toFixed(2) + " ₸";
+			const retailPrice = (areaM2 * priceSet[0]).toFixed(2) + " ₸";
+			const wholesalePrice = (areaM2 * priceSet[1]).toFixed(2) + " ₸";
+			const specialPrice = (areaM2 * priceSet[2]).toFixed(2) + " ₸";
 
 			document.getElementById("retail").textContent = retailPrice;
 			document.getElementById("wholesale").textContent = wholesalePrice;
