@@ -405,7 +405,18 @@
                 })
        		 );
 
+function customRound(value) {
+  const base = Math.floor(value / 10) * 10;
+  const remainder = value % 10;
 
+  if (remainder < 3) {
+    return base + 10;
+  } else if (remainder < 7) {
+    return base + 15;
+  } else {
+    return base + 20;
+  }
+}
 		function calculate() {
 			// Получение размеров
   			const length = parseFloat(document.getElementById('length').value);
@@ -423,10 +434,11 @@
   const extra2 = 4;
  const extra3 = 2; 
 
-  const rawsheetHeight = height + extra2 + (Math.floor(width / 2) + extra3) * 2 ;
-    const sheetHeight = Math.floor(rawsheetHeight);
-   const rawSheetWidth = 2 * length + 2 * width + glueFlap + extra;
-    const sheetWidth = Math.ceil(rawSheetWidth / 10) * 10;
+  const rawsheetHeight = height + extra2 + (Math.floor(width / 2) + extra3) * 2;
+  const sheetHeight = Math.floor(rawsheetHeight);
+
+ 	 const rawSheetWidth = 2 * length + 2 * width + glueFlap + extra;
+ 	 const sheetWidth = customRound(rawSheetWidth);
 
 
  			 const areaM2 = (sheetHeight * sheetWidth) / 1_000_000;
