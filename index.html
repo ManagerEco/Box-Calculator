@@ -417,13 +417,17 @@
    			 return;
  			 }
 			// Расчёт площади заготовки
-  				const thickness = 4;
-  				const glueFlap = 40;
-  				const extra = 12;
-  				const extra2 = 4;
-			const sheetHeight = height + extra2 + width + extra2;
- 			 const rawSheetWidth = 2 * length + 2 * width + glueFlap + extra;
- 			 const sheetWidth = Math.ceil(rawSheetWidth / 10) * 10;
+  const thickness = 4;
+  const glueFlap = 40;
+  const extra = 12;
+  const extra2 = 4;
+ const extra3 = 2; 
+
+  const rawsheetHeight = height + extra2 + (Math.floor(width / 2) + extra3) * 2 ;
+    const sheetHeight = Math.floor(rawsheetHeight);
+   const rawSheetWidth = 2 * length + 2 * width + glueFlap + extra;
+    const sheetWidth = Math.ceil(rawSheetWidth / 10) * 10;
+
 
  			 const areaM2 = (sheetHeight * sheetWidth) / 1_000_000;
 			// Вывод значений
