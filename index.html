@@ -473,17 +473,17 @@
 			if (fullArea < 2000) {
 				progress = (fullArea / 2000) * 33;
 				label = "Розничная цена";
-				const remaining = Math.ceil((2000 - fullArea) / area);
+				const remaining = Math.ceil((2000 - fullArea) / areaM2);
 				nextGoalText = `До розничной цены нужно ещё ~${remaining} шт.`;
 			} else if (fullArea < 3000) {
 				progress = 33 + ((fullArea - 2000) / 1000) * 33;
 				label = "Оптовая цена";
-				const remaining = Math.ceil((3000 - fullArea) / area);
+				const remaining = Math.ceil((3000 - fullArea) / areaM2);
 				nextGoalText = `До оптовой цены нужно ещё ~${remaining} шт.`;
 			} else if (fullArea < 18600) {
 				progress = 66 + ((fullArea - 3000) / (18600 - 3000)) * 34;
 				label = "Спец. цена";
-				const remaining = Math.ceil((18600 - fullArea) / area);
+				const remaining = Math.ceil((18600 - fullArea) / areaM2);
 				nextGoalText = `До спец цены нужно ещё ~${remaining} шт.`;
 			} else {
 				progress = 100;
