@@ -441,7 +441,14 @@ function customRound(value) {
  	 const sheetWidth = customRound(rawSheetWidth);
 
 
- 			 const areaM2 = (sheetHeight * sheetWidth) / 1_000_000;
+ 			 //const areaM2 = (sheetHeight * sheetWidth) / 1_000_000;
+
+				let areaM2;
+				  if (rawSheetWidth >= 2088) {
+				    areaM2 = (((width + length + 40 + 6) * sheetHeight) * 2) / 1_000_000;
+				  } else {
+ 				   areaM2 = (sheetHeight * sheetWidth) / 1_000_000;
+			
 			// Вывод значений
   			document.getElementById('area').value = areaM2.toFixed(5);
 	 
