@@ -244,13 +244,6 @@
 				padding: 15px;
 			}
 		}
-
-		.info-block {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.5s ease, padding 0.5s ease;
-  padding: 0 10px; /* горизонтальные отступы для красоты */
-}
 	</style>
 </head>
 
@@ -287,12 +280,6 @@
 		</select>
 
 		<button onclick="calculate()">Рассчитать</button>
-
-
-	<div id="infoBlock" class="info-block">
-			<div id="area-display" style="text-align: center; font-size: 1rem; margin: 15px 0; color: #4b4f66; font-weight: 600;">
-			</div>
-	</div>
 		
 		<h3>Цена за одну коробку:</h3>
 		<table>
@@ -546,25 +533,6 @@ function customRound(value) {
 				document.getElementById(target).style.backgroundColor = "#dbe6ff"; // лёгкий синий оттенок
 			}
 		}
-
-  if (!document.getElementById('result')) {
-  const resultBlock = document.createElement('div');
-  resultBlock.id = 'result';
-  resultBlock.style.marginTop = '20px';
-  resultBlock.style.color = '#333';
-  resultBlock.style.fontSize = '0.95rem';
-
-  const areaDisplay = document.getElementById('area-display');
-  areaDisplay.insertAdjacentElement('afterend', resultBlock);
-}
-
-  document.getElementById('result').innerHTML = `
-    <strong>Размер заготовки (мм):</strong><br>
-    Длина: <b>${sheetHeight}</b> мм<br>
-    Ширина: <b>${sheetWidth}</b> мм<br>
-    <strong>Площадь одной заготовки:</strong> <b>${areaM2.toFixed(5)}</b> м²<br>
-    <strong>Общая площадь (${quantity} шт.):</strong> <b>${totalArea.toFixed(3)}</b> м²
-  `;
 		
 		async function updatePrices() {
 			const sel = document.getElementById("update-grade").value;
