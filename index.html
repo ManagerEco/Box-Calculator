@@ -57,9 +57,9 @@ button {
   width: 100%;
   margin-top: 24px;
   padding: 12px;
-  background-color: #7a95ff;
-  border: none;
-  color: white;
+  background-color: #fff;
+  border: 1px solid;
+  color: #7a95ff;
   font-weight: 600;
   font-size: 1rem;
   border-radius: 10px;
@@ -68,7 +68,9 @@ button {
 }
 
 button:hover {
-  background-color: #667bcf;
+  background-color: #7a95ff;
+  color: white;
+  
 }
 
 table {
@@ -150,21 +152,6 @@ td {
   transform: translateY(0);
 }
 
-.glow-button {
-  animation: glowPulse 1.8s infinite ease-in-out;
-}
-
-@keyframes glowPulse {
-  0% {
-    box-shadow: 0 0 5px #7a95ff;
-  }
-  50% {
-    box-shadow: 0 0 20px #7a95ff;
-  }
-  100% {
-    box-shadow: 0 0 5px #aebeff;
-  }
-}
 
 .modal {
   position: fixed;
@@ -204,9 +191,9 @@ td {
 
 .modal-content button {
   padding: 10px 20px;
-  background-color: #7a95ff;
-  color: white;
-  border: none;
+  background-color: #fff;
+  color: #7a95ff;
+  border: 1px solid;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
@@ -214,7 +201,8 @@ td {
 }
 
 .modal-content button:hover {
-  background-color: #667bcf;
+  background-color: #7a95ff;
+   color: white;
 }
 
   </style>
@@ -245,8 +233,8 @@ td {
       <tr>
         <th>Мелкая Розница</th>
         <th>Розница до 2000 м²</th>
-        <th>Опт от 2000 м²</th>
-        <th>Спец от 3000 м²</th>
+        <th>Опт. от 2000 м²</th>
+        <th>Спец. от 3000 м²</th>
       </tr>
       <tr>
         <td id="retail1" class="price-cell">–</td>
