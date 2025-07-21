@@ -1,607 +1,462 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<link rel="icon" href="https://raw.githubusercontent.com/ManagerEco/Box-Calculator/refs/heads/main/logo.svg" type="image/svg+xml">
-	<title>Калькулятор стоимости коробки</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="icon" href="logo.svg" type="image/svg+xml">
+  <title>Калькулятор коробки</title>
+  <style>
+    body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f5f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  min-height: 100vh;
+  margin: 0;
+}
 
-	<style>
-		#progress-container {
-			position: relative;
-			width: 100%;
-			height: 30px;
-			background: #eee;
-			border-radius: 8px;
-			overflow: hidden;
-			margin-top: 20px;
-		}
+.container {
+  background: #ffffff;
+  padding: 24px 28px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 480px;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-		#progress-bar {
-			height: 100%;
-			width: 0;
-			border-radius: 8px;
-			background: linear-gradient(to right, #c8f7c5, #fff99a, #ffc979, #ffaaaa);
-			transition: width 0.6s ease;
-		}
+h2 {
+  text-align: center;
+  margin-bottom: 18px;
+  font-size: 20px;
+  color: #2d2f35;
+}
 
-		#progress-label {
-			position: absolute;
-			width: 100%;
-			text-align: center;
-			top: 0;
-			font-weight: bold;
-			font-size: 14px;
-			line-height: 30px;
-		}
+label {
+  display: block;
+  margin-top: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #444;
+}
 
-		#progress-note {
-			text-align: center;
-			font-size: 13px;
-			margin-top: 6px;
-			color: #555;
-		}
-	</style>
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-top: 6px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
 
-	<style>
-		* {
-			box-sizing: border-box;
-		}
+button {
+  width: 100%;
+  margin-top: 24px;
+  padding: 12px;
+  background-color: #7a95ff;
+  border: none;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 
-		body {
-			background: #f5f7fa;
-			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-			color: #333;
-			margin: 0;
-			min-height: 100vh;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			padding: 20px;
-		}
+button:hover {
+  background-color: #667bcf;
+}
 
-		.container {
-			background: #ffffff;
-			border-radius: 12px;
-			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-			max-width: 500px;
-			width: 100%;
-			padding: 30px 40px;
-		}
+table {
+  width: 100%;
+  margin-top: 18px;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 0.95rem;
+}
 
-		h2,
-		h3 {
-			text-align: center;
-			color: #3a3f58;
-			margin-bottom: 20px;
-			font-weight: 600;
-		}
+th, td {
+  padding: 10px 6px;
+  border-bottom: 1px solid #e0e0e0;
+}
 
-		label {
-			display: block;
-			margin-top: 15px;
-			font-weight: 600;
-			color: #5a607f;
-		}
+th {
+  color: #555;
+  font-weight: 600;
+  background-color: #fafafa;
+}
 
-		input[type="number"],
-		select {
-			width: 100%;
-			padding: 10px 15px;
-			margin-top: 6px;
-			border-radius: 8px;
-			border: 1.8px solid #cdd3e3;
-			font-size: 1rem;
-			background-color: #fafbff;
-			color: #4b4f66;
-			transition: border-color 0.3s ease;
-		}
+td {
+  background-color: #fff;
+  font-weight: 600;
+  color: #333;
+}
 
-		input[type="number"]:focus,
-		select:focus {
-			border-color: #a1b2ff;
-			outline: none;
-			background-color: #f0f3ff;
-			color: #1a1c29;
-		}
+.price-cell.active {
+  background-color: #e6f7e9 !important;
+  color: #237a3b;
+  font-weight: 800;
+  border-radius: 6px;
+}
 
-		button {
-			margin-top: 25px;
-			width: 100%;
-			background: #7a95ff;
-			border: none;
-			padding: 12px 0;
-			font-size: 1.1rem;
-			color: white;
-			border-radius: 10px;
-			cursor: pointer;
-			font-weight: 700;
-			box-shadow: 0 4px 10px rgba(122, 149, 255, 0.6);
-			transition: background-color 0.3s ease, box-shadow 0.3s ease;
-		}
+#discount-hint {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.92rem;
+  color: #333;
+  font-weight: 600;
+}
 
-		button:hover {
-			background: #5c75e6;
-			box-shadow: 0 6px 15px rgba(92, 117, 230, 0.8);
-		}
+.highlight-number {
+  background-color: #d6f2db;
+  color: #1c5a2d;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  display: inline-block;
+  margin: 0 3px;
+}
 
-		table {
-			border-collapse: separate;
-			border-spacing: 0 10px;
-			margin-top: 15px;
-			width: 100%;
-			text-align: center;
-			font-weight: 600;
-			color: #3a3f58;
-		}
+.info {
+  margin-top: 18px;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+}
 
-		th {
-			background: #e5e9ff;
-			padding: 12px 0;
-			border-radius: 12px 12px 0 0;
-			font-size: 1.1rem;
-		}
+/* Цены - вспышка при пересчете */
+@keyframes flashUpdate {
+  0%   { background-color: #ffeebd; }
+  100% { background-color: #f4f7ff; }
+}
 
-		td {
-			background: #f4f7ff;
-			padding: 15px 0;
-			border-radius: 0 0 12px 12px;
-			font-size: 1.15rem;
-			color: #4b4f66;
-			box-shadow: inset 0 -2px 5px rgba(255, 255, 255, 0.6);
-		}
+.price-cell.updated {
+  animation: flashUpdate 0.6s ease;
+}
 
-		.accordion {
-			margin-top: 40px;
-			border-radius: 14px;
-			overflow: hidden;
-			box-shadow: 0 6px 12px rgba(120, 140, 255, 0.12);
-		}
+/* Плавное появление блока информации */
+.info {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
-		.accordion-button {
-			background-color: #7a95ff;
-			color: white;
-			cursor: pointer;
-			padding: 14px 20px;
-			font-size: 1.05rem;
-			font-weight: 600;
-			text-align: left;
-			width: 100%;
-			border: none;
-			outline: none;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			transition: background-color 0.3s ease;
-			border-radius: 10px;
-		}
+.info.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-		.accordion-button:hover {
-			background-color: #5c75e6;
-		}
+.glow-button {
+  animation: glowPulse 1.8s infinite ease-in-out;
+}
 
-		.accordion-button .arrow {
-			font-size: 1.2rem;
-			transition: transform 0.3s ease;
-		}
-
-		.accordion-content {
-			max-height: 0;
-			overflow: hidden;
-			transition: max-height 0.4s ease;
-			background-color: #f9fbff;
-			padding: 0 20px;
-			border-radius: 0 0 12px 12px;
-		}
-
-		.accordion-content.show {
-			padding: 20px;
-			max-height: 1000px;
-		}
-
-		.accordion-content small {
-			color: #8a8fbd;
-			font-style: italic;
-			display: block;
-			margin-bottom: 10px;
-			font-size: 0.9rem;
-		}
-
-		@media (max-width: 480px) {
-			body {
-				padding: 10px;
-			}
-
-			.container {
-				padding: 20px;
-			}
-
-			input[type="number"],
-			select,
-			button {
-				font-size: 0.95rem;
-				padding: 10px;
-			}
-
-			h2,
-			h3 {
-				font-size: 1.1rem;
-			}
-
-			table th,
-			table td {
-				font-size: 0.95rem;
-				padding: 10px 0;
-			}
-
-			.accordion-button {
-				font-size: 1rem;
-				padding: 12px 16px;
-			}
-
-			.accordion-content {
-				padding: 15px;
-			}
-		}
-	</style>
-</head>
-
-<body>
-	<div class="container">
-		<h2>Калькулятор стоимости коробки из гофрокартона (₸)</h2>
-
-		<label for="length">Длина (Д), мм:</label>
-  		  <input type="number" id="length" value="">
-
-   		 <label for="width">Ширина (Ш), мм:</label>
-  		  <input type="number" id="width" value="">
-
-  		  <label for="height">Высота (В), мм:</label>
-  		  <input type="number" id="height" value="">
-		
-   			 <label for="area">Площадь заготовки (м²):</label>
-  			  <input type="number" id="area" step="0.001" value="" />
-
-		<label for="quantity">Количество коробок:</label>
-		<input type="number" id="quantity" value="1" min="1" />
-
-		<label for="grade">Марка и цвет картона:</label>
-		<select id="grade">
-			<option value="T-23С Бурый">Т-23С Бурый</option>
-			<option value="T-23В Бурый">Т-23В Бурый</option>
-			<option value="T-24С Бурый">Т-24С Бурый</option>
-			<option value="T-24В Бурый">Т-24В Бурый</option>
-			<option value="T-24В Белый">Т-24В Белый</option>
-			<option value="T-25С Бурый">Т-25С Бурый</option>
-			<option value="T-25В Бурый">Т-25В Бурый</option>
-			<option value="T-26С Бурый">Т-26С Бурый</option>
-			<option value="T-27С Бурый">Т-27С Бурый</option>
-		</select>
-
-		<button onclick="calculate()">Рассчитать</button>
-		
-		<h3>Цена за одну коробку:</h3>
-		<table>
-			<tr>
-				<th>Розничная</th>
-				<th>Оптовая</th>
-				<th>Спец. цена</th>
-			</tr>
-
-			
-
-			<tr>
-				<td id="retail">–</td>
-				<td id="wholesale">–</td>
-				<td id="special">–</td>
-			</tr>
-		</table>
-
-		<div id="progress-container">
-				<div id="progress-bar"></div>
-				<div id="progress-label"></div>
-			</div>
-
-			<div id="progress-note"></div>
-
-			<div id="progress-container" style="margin-top: 20px; display: none">
-				<div style="position: relative; width: 100%; height: 20px; background: #eee; border-radius: 10px">
-					<div id="progress-bar"
-						style="height: 100%; width: 0%; background: linear-gradient(to right, #a0c4ff, #4f83ff); border-radius: 10px">
-					</div>
-					<div id="progress-label"
-						style="position: absolute; width: 100%; text-align: center; top: 0; line-height: 20px; font-size: 12px; color: #333">
-					</div>
-				</div>
-			</div>
-
-		<!-- Аккордеон для формы изменения цен -->
-		<div class="accordion">
-			<button class="accordion-button" onclick="toggleAccordion(this)">Изменить цены <span
-					class="arrow">▼</span></button>
-			<div class="accordion-content" id="accordionContent">
-				<label for="update-grade">Выберите марку:</label>
-				<select id="update-grade" onchange="fillUpdateForm()">
-					<option value="T-23С Бурый">Т-23С Бурый</option>
-					<option value="T-23В Бурый">Т-23В Бурый</option>
-					<option value="T-24С Бурый">Т-24С Бурый</option>
-					<option value="T-24В Бурый">Т-24В Бурый</option>
-					<option value="T-24В Белый">Т-24В Белый</option>
-					<option value="T-25С Бурый">Т-25С Бурый</option>
-					<option value="T-25В Бурый">Т-25В Бурый</option>
-					<option value="T-26С Бурый">Т-26С Бурый</option>
-					<option value="T-27С Бурый">Т-27С Бурый</option>
-				</select>
-
-				<small>Оставьте поля пустыми, если не хотите изменять цену.</small>
-
-				<label for="update-retail-small">Розничная цена (меньше 1 м²):</label>
-				<input type="number" id="update-retail-small" step="0.01" placeholder="" />
-
-				<label for="update-wholesale-small">Оптовая цена (меньше 1 м²):</label>
-				<input type="number" id="update-wholesale-small" step="0.01" placeholder="" />
-
-				<label for="update-special-small">Спец. цена (меньше 1 м²):</label>
-				<input type="number" id="update-special-small" step="0.01" placeholder="" />
-
-				<label for="update-retail-large">Розничная цена (≥ 1 м²):</label>
-				<input type="number" id="update-retail-large" step="0.01" placeholder="" />
-
-				<label for="update-wholesale-large">Оптовая цена (≥ 1 м²):</label>
-				<input type="number" id="update-wholesale-large" step="0.01" placeholder="" />
-
-				<label for="update-special-large">Спец. цена (≥ 1 м²):</label>
-				<input type="number" id="update-special-large" step="0.01" placeholder="" />
-
-				<button onclick="updatePrices()">Обновить цены</button>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		let prices = {};
-
-		const initData = async () => {
-			prices = await fetch("https://api.jsonbin.io/v3/b/685193898561e97a5025e715/", {
-              			  method: "GET",
-             			   headers: {
-                    "X-Master-Key": "$2a$10$Urvphe8wDLXk0hQCP93w6.9PurhM0LY.a2U10Jr5qudHJYCo.XQ7i",
-                    "X-Access-Key": "$2a$10$F0eZWdQx6eGyDr6m3s4Pkux9oxEzm/MCgWt6Tj03cqNgtm1insXyO",
-                    "X-Bin-Meta": "false"
-             		   }
-          		  })
-				.then((response) => response.json())
-				.then((data) => data)
-				.catch((error) => {
-					console.error("Error fetching JSON:", error);
-
-					return false;
-				});
-
-			if (prices === false || Object.keys(prices).length === 0) {
-				alert("Не удалось получить данные о ценах!");
-
-				return false;
-			}
-
-			return true;
-		};
-
-
-		const saveData = (data) => (
-            fetch("https://api.jsonbin.io/v3/b/685193898561e97a5025e715/", {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Master-Key": "$2a$10$Urvphe8wDLXk0hQCP93w6.9PurhM0LY.a2U10Jr5qudHJYCo.XQ7i",
-                    "X-Access-Key": "$2a$10$F0eZWdQx6eGyDr6m3s4Pkux9oxEzm/MCgWt6Tj03cqNgtm1insXyO",
-                    "X-Bin-Meta": "false",
-                },
-                body: JSON.stringify(data)
-            })
-                .then((response) => response.status === 200 ? true : false)
-                .catch((error) => {
-                    console.error("Error updating JSON:", error);
-
-                    return false;
-                })
-       		 );
-
-function customRound(value) {
-  const base = Math.floor(value / 10) * 10;
-  const remainder = value % 10;
-
-  if (remainder < 3) {
-    return base + 10;
-  } else if (remainder < 7) {
-    return base + 15;
-  } else {
-    return base + 20;
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 5px #7a95ff;
+  }
+  50% {
+    box-shadow: 0 0 20px #7a95ff;
+  }
+  100% {
+    box-shadow: 0 0 5px #aebeff;
   }
 }
-		function calculate() {
-			// Получение размеров
-  			const length = parseFloat(document.getElementById('length').value);
-  			const width = parseFloat(document.getElementById('width').value);
-  			const height = parseFloat(document.getElementById('height').value);
 
- 			 if (isNaN(length) || isNaN(width) || isNaN(height) || length <= 0 || width <= 0 || height <= 0) {
-   			 alert('Введите корректные размеры (все значения должны быть положительными числами)');
-   			 return;
- 			 }
-			// Расчёт площади заготовки
-  const thickness = 4;
-  const glueFlap = 40;
-  const extra = 12;
-  const extra2 = 4;
- const extra3 = 2; 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  transition: opacity 0.3s ease;
+}
 
-  const rawsheetHeight = height + extra2 + (Math.floor(width / 2) + extra3) * 2;
-  const sheetHeight = Math.floor(rawsheetHeight);
+.modal.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 
- 	 const rawSheetWidth = 2 * length + 2 * width + glueFlap + extra;
- 	 const sheetWidth = customRound(rawSheetWidth);
+.modal-content {
+  background-color: white;
+  padding: 24px 28px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
 
+.modal-content p {
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 600;
+}
 
- 			 //const areaM2 = (sheetHeight * sheetWidth) / 1_000_000;
+.modal-content button {
+  padding: 10px 20px;
+  background-color: #7a95ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
 
-				let areaM2;
-				  if (rawSheetWidth >= 2088) {
-				    areaM2 = (((width + length + 40 + 6) * sheetHeight) * 2) / 1_000_000;
-				  } else {
- 				   areaM2 = (sheetHeight * sheetWidth) / 1_000_000;
-				  }
-			
-			// Вывод значений
-  			document.getElementById('area').value = areaM2.toFixed(5);
-	 
+.modal-content button:hover {
+  background-color: #667bcf;
+}
 
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Калькулятор стоимости коробки из гофрокартона</h2>
 
-			
-			// const area = parseFloat(document.getElementById("area").value);
-			const quantity = parseInt(document.getElementById("quantity").value);
-			const selected = document.getElementById("grade").value;
+    <label>Длина (мм):</label>
+    <input type="number" id="length" />
 
-			if (isNaN(areaM2) || areaM2 <= 0 || isNaN(quantity) || quantity <= 0) {
-				alert("Введите корректные значения площади и количества");
-				return;
-			}
+    <label>Ширина (мм):</label>
+    <input type="number" id="width" />
 
-			const fullArea = areaM2 * quantity;
-			const priceSet = areaM2 >= 1 ? prices[selected].large : prices[selected].small;
+    <label>Высота (мм):</label>
+    <input type="number" id="height" />
 
-			const retailPrice = (areaM2 * priceSet[0]).toFixed(2) + " ₸";
-			const wholesalePrice = (areaM2 * priceSet[1]).toFixed(2) + " ₸";
-			const specialPrice = (areaM2 * priceSet[2]).toFixed(2) + " ₸";
+    <label>Количество коробок:</label>
+    <input type="number" id="quantity" value="1" min="1" />
 
-			document.getElementById("retail").textContent = retailPrice;
-			document.getElementById("wholesale").textContent = wholesalePrice;
-			document.getElementById("special").textContent = specialPrice;
+    <label>Марка картона:</label>
+    <select id="grade"></select>
 
-			// Очистка всех цветовых подсветок
-			["retail", "wholesale", "special"].forEach((id) => {
-				document.getElementById(id).style.backgroundColor = "#f4f7ff";
-			});
-			// Обновление шкалы прогресса
-			let progress = 0;
-			let label = "";
-			let nextGoalText = "";
-			const steps = [
-				{ threshold: 2000, label: "Розничная цена" },
-				{ threshold: 3000, label: "Оптовая цена" },
-				{ threshold: 18600, label: "Спец. цена" },
-			];
+    <button class="glow-button" onclick="calculate()">Рассчитать</button>
 
-			if (fullArea < 2000) {
-				progress = (fullArea / 2000) * 33;
-				label = "Розничная цена";
-				const remaining = Math.ceil((2000 - fullArea) / areaM2);
-				nextGoalText = `До розничной цены нужно ещё ~${remaining} шт.`;
-			} else if (fullArea < 3000) {
-				progress = 33 + ((fullArea - 2000) / 1000) * 33;
-				label = "Оптовая цена";
-				const remaining = Math.ceil((3000 - fullArea) / areaM2);
-				nextGoalText = `До оптовой цены нужно ещё ~${remaining} шт.`;
-			} else if (fullArea < 18600) {
-				progress = 66 + ((fullArea - 3000) / (18600 - 3000)) * 34;
-				label = "Спец. цена";
-				const remaining = Math.ceil((18600 - fullArea) / areaM2);
-				nextGoalText = `До спец цены нужно ещё ~${remaining} шт.`;
-			} else {
-				progress = 100;
-				label = "Макс. скидка!";
-				nextGoalText = "";
-			}
+    <h3 style="text-align: center;">Цена за коробку:</h3>
+    <table>
+      <tr>
+        <th>Мелкая Розница</th>
+        <th>Розница 0-2000 м²</th>
+        <th>Опт 2000-3000 м²</th>
+        <th>Спец >3000 м²</th>
+      </tr>
+      <tr>
+        <td id="retail1" class="price-cell">–</td>
+        <td id="retail2" class="price-cell">–</td>
+        <td id="wholesale" class="price-cell">–</td>
+        <td id="special" class="price-cell">–</td>
+      </tr>
+    </table>
+	<div id="discount-hint" style="margin-top: 12px; text-align: center; font-weight: 600; color: #3a3f58;"></div>
 
-			document.getElementById("progress-bar").style.width = progress + "%";
-			document.getElementById("progress-label").textContent = `${Math.round(progress)}% — ${label}`;
-			document.getElementById("progress-note").textContent = nextGoalText;
+    <div id="info" class="info"></div>
+	
+	<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <p id="modal-message">Ошибка</p>
+    <button onclick="closeModal()">ОК</button>
+  </div>
+</div>
+  </div>
 
-			// Определяем категорию по полной площади
-			let target;
-			if (fullArea >= 18600) {
-				target = "special";
-			} else if (fullArea >= 3000) {
-				target = "wholesale";
-			} else if (fullArea >= 2000) {
-				target = "retail";
-			} else {
-				target = null; // не подсвечивать, если меньше 2000
-			}
+  <script>
+    const prices = {
+      "Т-23С Бурый": { retail1: 702.83, retail2: 284.17, wholesale: 244.98, special: 234.28 },
+      "Т-23В Бурый": { retail1: 689.64, retail2: 278.84, wholesale: 240.38, special: 234.28 },
+      "Т-24С Бурый": { retail1: 735.84, retail2: 297.52, wholesale: 256.48, special: 245.28 },
+      "Т-24В Бурый": { retail1: 725.93, retail2: 293.51, wholesale: 253.03, special: 241.98 },
+      "Т-24В Белый": { retail1: 874.44, retail2: 353.54, wholesale: 304.78, special: 291.48 },
+      "Т-25С Бурый": { retail1: 768.81, retail2: 310.84, wholesale: 267.97, special: 256.27 },
+      "Т-25В Бурый": { retail1: 762.23, retail2: 308.18, wholesale: 265.68, special: 254.08 },
+      "Т-26С Бурый": { retail1: 883.94, retail2: 357.38, wholesale: 308.09, special: 294.65 },
+      "Т-27С Бурый": { retail1: 960.22, retail2: 388.22, wholesale: 334.67, special: 320.07 }
+    };
 
-			// Подсветка соответствующей цены
-			if (target) {
-				document.getElementById(target).style.backgroundColor = "#dbe6ff"; // лёгкий синий оттенок
-			}
-		}
-		
-		async function updatePrices() {
-			const sel = document.getElementById("update-grade").value;
-			const fields = [
-				["update-retail-small", "small", 0],
-				["update-wholesale-small", "small", 1],
-				["update-special-small", "small", 2],
-				["update-retail-large", "large", 0],
-				["update-wholesale-large", "large", 1],
-				["update-special-large", "large", 2],
-			];
-			for (const [id, size, idx] of fields) {
-				const val = document.getElementById(id).value;
-				if (val !== "") {
-					const num = parseFloat(val);
-					if (isNaN(num) || num < 0) {
-						alert("Цены должны быть положительными числами");
-						return;
-					}
-					prices[sel][size][idx] = num;
-				}
-			}
-			
-			const result = await saveData(prices);
+    const gradeSelect = document.getElementById('grade');
+    Object.keys(prices).forEach(key => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = key;
+      gradeSelect.appendChild(option);
+    });
 
-		            if(!result){
-		                alert("Не удалось обновить цены!");
-				    return;
-		            }
+function animateNumber(el, start, end, duration = 300) {
+  const range = end - start;
+  const startTime = performance.now();
 
-			
-			alert("Цены обновлены");
-			document.querySelectorAll("input[type=number]").forEach((i) => (i.value = ""));
-			fillUpdateForm();
-		}
+  function step(currentTime) {
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+    const current = start + range * progress;
+    el.textContent = current.toFixed(2) + ' ₸';
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
 
-		function fillUpdateForm() {
-			const sel = document.getElementById("update-grade").value;
-			const p = prices[sel];
-			document.getElementById("update-retail-small").placeholder = p.small[0].toFixed(2);
-			document.getElementById("update-wholesale-small").placeholder = p.small[1].toFixed(2);
-			document.getElementById("update-special-small").placeholder = p.small[2].toFixed(2);
-			document.getElementById("update-retail-large").placeholder = p.large[0].toFixed(2);
-			document.getElementById("update-wholesale-large").placeholder = p.large[1].toFixed(2);
-			document.getElementById("update-special-large").placeholder = p.large[2].toFixed(2);
-		}
+  requestAnimationFrame(step);
+}
 
-		function toggleAccordion(button) {
-			const content = document.getElementById("accordionContent");
-			content.classList.toggle("show");
+    function calculate() {
+  const L = +document.getElementById('length').value;
+  const W = +document.getElementById('width').value;
+  const H = +document.getElementById('height').value;
+  const qty = +document.getElementById('quantity').value;
+  const grade = document.getElementById('grade').value;
 
-			const arrow = button.querySelector(".arrow");
-			if (content.classList.contains("show")) {
-				arrow.textContent = "▲";
-			} else {
-				arrow.textContent = "▼";
-			}
-		}
+  if (!L || !W || !H || !qty || qty <= 0) {
+  showModal("Пожалуйста, введите корректные данные для всех полей.");
+  return;
+}
 
-		window.addEventListener("load", async () => {
-			const result = await initData();
+  function customRound(value) {
+  const base = Math.floor(value / 10) * 10;
+  const remainder = value % 10;
+  if (remainder < 3) return base + 10;
+  else if (remainder < 7) return base + 15;
+  else return base + 20;
+}
 
-			if (!result) return;
+const thickness = 4;
+const glueFlap = 40;
+const extra = 12;
+const extra2 = 4;
+const extra3 = 2;
 
-			fillUpdateForm();
-		});
-	</script>
+const rawSheetHeight = H + extra2 + (Math.floor(W / 2) + extra3) * 2;
+const sheetHeight = Math.floor(rawSheetHeight);
+
+const rawSheetWidth = 2 * L + 2 * W + glueFlap + extra;
+const sheetWidth = customRound(rawSheetWidth);
+
+let area;
+if (rawSheetWidth >= 2088) {
+  area = (((W + L + glueFlap + 6) * sheetHeight) * 2) / 1_000_000;
+} else {
+  area = (sheetHeight * sheetWidth) / 1_000_000;
+}
+  const totalArea = area * qty;
+
+  let tier = '';
+  if (totalArea >= 3000) tier = 'special';
+  else if (totalArea >= 2000) tier = 'wholesale';
+  else if (area >= 0.3) tier = 'retail2';
+  else tier = 'retail1';
+
+  const selectedPrices = prices[grade];
+
+  document.querySelectorAll('.price-cell').forEach(td => {
+  td.classList.remove('active', 'updated');
+});
+
+const cells = {
+  retail1: area * selectedPrices.retail1,
+  retail2: area * selectedPrices.retail2,
+  wholesale: area * selectedPrices.wholesale,
+  special: area * selectedPrices.special
+};
+
+for (const id in cells) {
+  const el = document.getElementById(id);
+  const oldValue = parseFloat(el.textContent) || 0;
+  animateNumber(el, oldValue, cells[id]);
+}
+
+['retail1', 'retail2', 'wholesale', 'special'].forEach(id => {
+  document.getElementById(id).classList.add('updated'); // анимация
+});
+
+document.getElementById(tier).classList.add('active');
+
+  // Расчёт "сколько добрать"
+  let nextTier = '';
+  let nextThreshold = 0;
+
+  if (tier === 'retail1' && area >= 0.3) {
+    nextTier = 'retail2';
+    nextThreshold = 0.3;
+  } else if (tier === 'retail1' || tier === 'retail2') {
+    nextTier = 'wholesale';
+    nextThreshold = 2000;
+  } else if (tier === 'wholesale') {
+    nextTier = 'special';
+    nextThreshold = 3000;
+  }
+
+  let suggestionText = '';
+if (nextTier && nextThreshold) {
+  if (nextTier === 'retail2') {
+    suggestionText = `Ваша коробка уже превышает 0.3 м² — применяется цена "${nextTier}".`;
+  } else {
+    const remainingArea = nextThreshold - totalArea;
+    const extraBoxes = Math.ceil(remainingArea / area);
+    if (extraBoxes > 0) {
+      const tierNames = {
+  retail2: 'Розничную цену',
+  wholesale: 'Оптовую цену',
+  special: 'Спец. цену'
+};
+
+suggestionText = `Добавьте ещё <span class="highlight-number">${extraBoxes}</span> коробок, чтобы получить <strong>${tierNames[nextTier]}</strong>.`;
+
+    }
+  }
+}
+
+const areaEl = document.getElementById('areaValue');
+const totalEl = document.getElementById('totalAreaValue');
+
+if (areaEl && totalEl) {
+  const oldArea = parseFloat(areaEl.textContent) || 0;
+  const oldTotal = parseFloat(totalEl.textContent) || 0;
+
+  animateNumber(areaEl, oldArea, area, 500);
+  animateNumber(totalEl, oldTotal, totalArea, 500);
+}
+
+// Вывод текста под таблицей
+document.getElementById('discount-hint').innerHTML = suggestionText;
+document.getElementById('info').innerHTML = `
+  <div><strong>Заготовка:</strong> ${sheetWidth} × ${sheetHeight} мм</div>
+  <div><strong>Площадь 1 коробки:</strong> <span id="areaValue">${area.toFixed(3)}</span> м²</div>
+  <div><strong>Общая площадь:</strong> <span id="totalAreaValue">${totalArea.toFixed(2)}</span> м²</div>
+`;
+
+const infoBlock = document.getElementById('info');
+infoBlock.innerHTML = `
+  <strong>Заготовка:</strong> ${sheetWidth} × ${sheetHeight} мм<br>
+  <strong>Площадь 1 коробки:</strong> ${area.toFixed(3)} м²<br>
+  <strong>Общая площадь:</strong> ${totalArea.toFixed(2)} м²
+`;
+
+// Добавить анимацию появления
+infoBlock.classList.remove('visible'); // на случай повторного расчета
+setTimeout(() => infoBlock.classList.add('visible'), 50);
+}
+
+function showModal(message) {
+  const modal = document.getElementById("modal");
+  const messageEl = document.getElementById("modal-message");
+  messageEl.textContent = message;
+  modal.classList.remove("hidden");
+
+  // Автоматически закрыть через 5 секунд (можно убрать)
+  setTimeout(() => {
+    closeModal();
+  }, 5000);
+}
+
+function closeModal() {
+  const modal = document.getElementById("modal");
+  modal.classList.add("hidden");
+}
+  </script>
 </body>
-
 </html>
